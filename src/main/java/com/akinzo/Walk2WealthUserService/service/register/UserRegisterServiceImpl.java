@@ -2,6 +2,7 @@ package com.akinzo.Walk2WealthUserService.service.register;
 
 import com.akinzo.Walk2WealthUserService.dtos.request.UserRegisterRequest;
 import com.akinzo.Walk2WealthUserService.service.email.EmailValidator;
+import com.akinzo.Walk2WealthUserService.service.password.PasswordValidator;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ public class UserRegisterServiceImpl implements UsersRegisterService{
         if(user.getEmail().isEmpty() || user.getEmail().isBlank()) throw new IllegalArgumentException("Email cannot be empty");
         if(!EmailValidator.validateEmail(user.getEmail())) throw new IllegalArgumentException("Invalid email");
         if(user.getPassword().isEmpty() || user.getPassword().isBlank()) throw new IllegalArgumentException("Password cannot be empty");
+        if(!PasswordValidator.validatePassword(user.getPassword())) throw new IllegalArgumentException("Invalid password");
         return "";
     }
 }

@@ -4,7 +4,6 @@ import com.akinzo.Walk2WealthUserService.dtos.request.UserRegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -14,14 +13,14 @@ class UserRegisterServiceImplTest {
     private UserRegisterServiceImpl userRegisterService;
 
     @Test
-    void testToThrowExceptionWhenFirstNameIsBlank(){
+    void testToThrowExceptionWhenFirstNameIsBlank() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setFirstName("");
         assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
     }
 
     @Test
-    void testToThrowExceptionWhenLastNameIsBlank(){
+    void testToThrowExceptionWhenLastNameIsBlank() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setFirstName("first name");
         userRegisterRequest.setLastName("");
@@ -29,7 +28,7 @@ class UserRegisterServiceImplTest {
     }
 
     @Test
-    void testToThrowExceptionWhenEmailIsBlank(){
+    void testToThrowExceptionWhenEmailIsBlank() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setFirstName("first name");
         userRegisterRequest.setLastName("last name");
@@ -38,7 +37,7 @@ class UserRegisterServiceImplTest {
     }
 
     @Test
-    void testToThrowExceptionWhenEmailIsInvalid(){
+    void testToThrowExceptionWhenEmailIsInvalid() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setFirstName("first name");
         userRegisterRequest.setLastName("last name");
@@ -47,7 +46,7 @@ class UserRegisterServiceImplTest {
     }
 
     @Test
-    void testToThrowExceptionWhenPasswordIsEmptyOrBlank(){
+    void testToThrowExceptionWhenPasswordIsEmptyOrBlank() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setFirstName("first name");
         userRegisterRequest.setLastName("last name");
@@ -55,4 +54,56 @@ class UserRegisterServiceImplTest {
         userRegisterRequest.setPassword("");
         assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
     }
+
+    @Test
+    void testToThrowExceptionWhenPasswordLessThan8Characters() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first name");
+        userRegisterRequest.setLastName("last name");
+        userRegisterRequest.setEmail("correct@gmail.com");
+        userRegisterRequest.setPassword("Oluwaf");
+        assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
+    }
+
+    @Test
+    void testToThrowExceptionWhenPasswordDidNotIncludeUppercase() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first name");
+        userRegisterRequest.setLastName("last name");
+        userRegisterRequest.setEmail("correct@gmail.com");
+        userRegisterRequest.setPassword("oluwafemi");
+        assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
+    }
+
+    @Test
+    void testToThrowExceptionWhenPasswordDidNotIncludeLowercase() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first name");
+        userRegisterRequest.setLastName("last name");
+        userRegisterRequest.setEmail("correct@gmail.com");
+        userRegisterRequest.setPassword("OLUWAFEMI");
+        assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
+    }
+
+    @Test
+    void testToThrowExceptionWhenPasswordDidNotIncludeSpecialCharacters() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first name");
+        userRegisterRequest.setLastName("last name");
+        userRegisterRequest.setEmail("correct@gmail.com");
+        userRegisterRequest.setPassword("Oluwafemi");
+        assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
+    }
+
+    @Test
+    void testToThrowExceptionWhenPasswordDidNotIncludeNumbers() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first name");
+        userRegisterRequest.setLastName("last name");
+        userRegisterRequest.setEmail("correct@gmail.com");
+        userRegisterRequest.setPassword("Oluwafemi..");
+        assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
+    }
 }
+
+
