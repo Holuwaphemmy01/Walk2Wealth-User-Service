@@ -1,6 +1,8 @@
 package com.akinzo.Walk2WealthUserService.service.register;
 
 import com.akinzo.Walk2WealthUserService.dtos.request.UserRegisterRequest;
+import com.akinzo.Walk2WealthUserService.repository.UsersRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +13,13 @@ class UserRegisterServiceImplTest {
 
     @Autowired
     private UserRegisterServiceImpl userRegisterService;
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @BeforeEach
+    void setUp() {
+        usersRepository.deleteAll();
+    }
 
     @Test
     void testToThrowExceptionWhenFirstNameIsBlank() {
@@ -104,6 +113,67 @@ class UserRegisterServiceImplTest {
         userRegisterRequest.setPassword("Oluwafemi..");
         assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest));
     }
+
+    @Test
+    void testToRegisterUserSuccessfullyAndIdIsGeneratedAndIdIsNotEmpty() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first name");
+        userRegisterRequest.setLastName("last name");
+        userRegisterRequest.setEmail("correct@gmail.com");
+        userRegisterRequest.setPassword("Victor2002@..,");
+        userRegisterRequest.setUsername("adewale");
+        String users = userRegisterService.registerUser(userRegisterRequest);
+        System.out.println(users);
+        assertNotNull(users);
+    }
+
+    @Test
+    void testToThrowExceptionWhenARegisteredEmailIsBeingUsedAgain() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first");
+        userRegisterRequest.setLastName("last ");
+        userRegisterRequest.setEmail("correctMail@gmail.com");
+        userRegisterRequest.setPassword("Victor2002@..,");
+        userRegisterRequest.setUsername("adewale");
+        String users = userRegisterService.registerUser(userRegisterRequest);
+        assertNotNull(users);
+
+        UserRegisterRequest userRegisterRequest2 = new UserRegisterRequest();
+        userRegisterRequest2.setFirstName("first name");
+        userRegisterRequest2.setLastName("last name");
+        userRegisterRequest2.setEmail("correctMail@gmail.com");
+        userRegisterRequest2.setPassword("Victor2002@..,");
+        userRegisterRequest2.setUsername("adewale");
+        assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest2));
+
+    }
+
+
+
+    @Test
+    void testToThrowExceptionWhenARegisteredUsernamesBeingUsedAgain() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setFirstName("first");
+        userRegisterRequest.setLastName("last ");
+        userRegisterRequest.setEmail("correct@gmail.com");
+        userRegisterRequest.setPassword("Victor2002@..,");
+        userRegisterRequest.setUsername("adewale");
+        String users = userRegisterService.registerUser(userRegisterRequest);
+        assertNotNull(users);
+
+        UserRegisterRequest userRegisterRequest2 = new UserRegisterRequest();
+        userRegisterRequest2.setFirstName("first name");
+        userRegisterRequest2.setLastName("last name");
+        userRegisterRequest2.setEmail("correctMail@gmail.com");
+        userRegisterRequest2.setPassword("Victor2002@..,");
+        userRegisterRequest2.setUsername("adewale");
+        assertThrows(IllegalArgumentException.class, () -> userRegisterService.registerUser(userRegisterRequest2));
+        assertEquals(usersRepository.count(), 1);
+
+    }
+
+
+
 }
 
 

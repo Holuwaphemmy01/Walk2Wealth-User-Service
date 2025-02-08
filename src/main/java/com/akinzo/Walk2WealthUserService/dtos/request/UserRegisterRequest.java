@@ -1,7 +1,7 @@
 package com.akinzo.Walk2WealthUserService.dtos.request;
 
-import lombok.Data;
-import lombok.ToString;
+//import lombok.Data;
+//import lombok.ToString;
 
 
 public class UserRegisterRequest {
@@ -9,6 +9,15 @@ public class UserRegisterRequest {
     private String lastName;
     private String email;
     private String password;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getFirstName() {
         return firstName;
